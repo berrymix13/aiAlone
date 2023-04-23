@@ -30,14 +30,14 @@ def parser_args():
     return parser.parse_args()
 
 # 추론에 사용될 parser 선언
-def infer_parser_args():
-    parser = argparse.ArgumentParser()
+def infer_parser_args(): 
+    parser = argparse.ArgumentParser() 
     
     parser.add_argument("--folder", type=str)
     parser.add_argument("--image", type=str)
     parser.add_argument("--device", default=torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
-
-    return parser.infer_parser_args()
+    
+    return parser.parse_args()
 
 # 저장된 best_model의 json file을 읽어오는 함수
 def load_trained_args(args):
