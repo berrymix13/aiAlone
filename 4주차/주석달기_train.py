@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 from torch.optim import Adam
 
-from utils.parser import parser_args
+from utils.주석달기_parser import parser_args
 from utils.주석달기_getModeuls import getDataLoader, getTargetModel
 from utils.evaluation import eval
 from utils.주석달기_tools import get_save_folder_path
@@ -28,11 +28,11 @@ def main():
         del json_args['device']
         # dump   : python 객체를 Json문자열로 변환
         # indent : 들여쓰기 갯수 (미관용)
-        json.dump(vars(json_args), f, indent=4)  
+        json.dump(json_args, f, indent=4)  
     
     # train_loader, test_loader 정의
     train_loader, test_loader = getDataLoader(args) 
-    
+
     # model 정의
     model =getTargetModel(args)
     # loss 정의
@@ -56,14 +56,14 @@ def main():
 
             if idx % 100 == 0:
                 print(loss_value.item())
-                acc = eval(model, test_loader, args)
+                acc = eval(model, test_loader, args)[0]
                 print('acc : ',acc)
                 # 현재 정확도가 best정확도보다 높으면 저장
                 if best_acc < acc :
                     # best_acc 업데이트
                     best_acc = acc
                     # state_dict : 각 layer마다 tensor로 매핑되는 매개변수를 dict로 저장
-                    torch.save(model.state_dict(), os.path.join(save_folder_path, 'best_model.ckpt'))
+                    torch.save(model.state_dict(), os.path.join(save_folder_path, f'best_model.ckpt'))
                     print(f'new best model saved!! acc:{acc*100:.2f}')
 
 # main함수 실행 

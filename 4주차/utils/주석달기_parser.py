@@ -20,10 +20,12 @@ def parser_args():
     # img_size
     parser.add_argument("--img_size", type=int, default=32)
     # model_type
-    parser.add_argument('--model_type', type=str, default='mylenet', choices=['mlp', 'lenet', 'linear', 'conv', 'incep'])
+    parser.add_argument('--model_type', type=str, default='lenet', choices=['mlp', 'lenet', 'linear', 'conv', 'incep'])
     # parser.add_argument("--vgg_type", type=str, default='a', choices=['a', 'b', 'c', 'd', 'e'])
     # save_folder (results라는 폴더 생성)
     parser.add_argument("--save_folder", type=str, default="results")
+    # resume 작성해보기
+    parser.add_argument("--resume",'-r', action='store_true')
     
     return parser.parse_args()
 
@@ -35,7 +37,7 @@ def infer_parser_args():
     parser.add_argument("--image", type=str)
     parser.add_argument("--device", default=torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
 
-    return parser.infer_parse_args()
+    return parser.infer_parser_args()
 
 # 저장된 best_model의 json file을 읽어오는 함수
 def load_trained_args(args):
