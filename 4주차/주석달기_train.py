@@ -24,7 +24,7 @@ def main():
     with open(os.path.join(save_folder_path, 'args.json'), 'w') as f:
         # json_args에 args 복사
         json_args = args.__dict__.copy()
-        # json 저장에 오류나는 device 삭세
+        # json 저장에 오류나는 device 삭제
         del json_args['device']
         # dump   : python 객체를 Json문자열로 변환
         # indent : 들여쓰기 갯수 (미관용)
@@ -35,6 +35,22 @@ def main():
 
     # model 정의
     model =getTargetModel(args)
+
+    # Resume 작성해보기
+    # 참고자료에서는 DataLoad, 모델정의 이후, optim정의 이전에 작성됨
+    if args.resume:
+        # Load checkpoint.
+        print('==> Resuming from checkpoint..')
+        assert os.path.isdir('result'), 'Error: no result directory found!'
+        # result폴더 내 가장 큰 번호 찾기
+        current_max_value = max([int(f) for f in os.listdir(args.save_folder)])
+        # 가장 큰 번호에서 checkpoint 가져옴
+        checkpoint = torch.load(f'./result/{current_max_value}.pth')
+        # 가중치 업데이트
+        model.load_state_dict(checkpoint['net'])
+        best_acc = checkpoint['acc']
+        start_epoch = checkpoint['epoch']
+
     # loss 정의
     loss = nn.CrossEntropyLoss()
     # optimezer 정의
@@ -42,7 +58,7 @@ def main():
 
     # 정확도 저장용 변수 정의
     best_acc = 0
-    for epoch in range(args.epochs):
+    for epoch in range(start_epoch, start_epoch+200):
         for idx, (image, target) in enumerate(train_loader):
             image = image.to(args.device)
             target = target.to(args.device)
