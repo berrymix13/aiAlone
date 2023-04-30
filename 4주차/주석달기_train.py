@@ -36,7 +36,7 @@ def main():
     # model 정의
     model =getTargetModel(args)
 
-    # Resume 작성해보기
+    # Resume 작성해보기 (수정)
     # 참고자료에서는 DataLoad, 모델정의 이후, optim정의 이전에 작성됨
     if args.resume:
         # Load checkpoint.
@@ -47,7 +47,8 @@ def main():
         # 가장 큰 번호에서 checkpoint 가져옴
         checkpoint = torch.load(f'./result/{current_max_value}.pth')
         # 가중치 업데이트
-        model.load_state_dict(checkpoint['net'])
+        # 수정 : checkpoint['net]  -> checkpoint
+        model.load_state_dict(checkpoint)
         best_acc = checkpoint['acc']
         start_epoch = checkpoint['epoch']
 
