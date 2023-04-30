@@ -46,6 +46,6 @@ def load_trained_args(args):
         trained_args = json.load(f)
     # device 정의 
     trained_args['device'] = args.device
-    # ** : 딕셔너리 형태로 입력이 가능하게 해줌
+    # ** : dictionary 값을 un-packing
     trained_args = argparse.Namespace(**trained_args)
     return trained_args
